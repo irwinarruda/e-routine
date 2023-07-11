@@ -12,6 +12,7 @@ type envVariables string
 const (
 	Port    envVariables = "PORT"
 	BaseURL envVariables = "BASE_URL"
+	DbURL   envVariables = "DB_URL"
 )
 
 func Load() {

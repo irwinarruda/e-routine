@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"strings"
@@ -63,26 +62,6 @@ func RunCommand(cmd *exec.Cmd) {
 	}
 }
 
-func LoadStdout(cmd *exec.Cmd) *io.ReadCloser {
-	var stdout, err = cmd.StdoutPipe()
-	if err != nil {
-		fmt.Printf("Error creating StdoutPipe: %v\n", err)
-		os.Exit(1)
-		return nil
-	}
-	return &stdout
-}
-
-func LoadStderr(cmd *exec.Cmd) *io.ReadCloser {
-	var stderr, err = cmd.StderrPipe()
-	if err != nil {
-		fmt.Printf("Error creating StderrPipe: %v\n", err)
-		os.Exit(1)
-		return nil
-	}
-	return &stderr
-}
-
 func LoadEnv() *Env {
 	var err = godotenv.Load()
 	if err != nil {
@@ -116,16 +95,16 @@ func main() {
 	var args = ParseArgs()
 
 	var cmd *exec.Cmd
-	var commandPath = []string{"goose", "-dir", *args.path, "postgres", (*env).DbUrl}
+	var commandPath = [6]string{"goose", "-dir", *args.path, "postgres", (*env).DbUrl, ""}
 	if *args.up {
-		commandPath = append(commandPath, "up")
+		commandPath[5] = "up"
 		cmd = exec.Command(commandPath[0], commandPath[1:]...)
 	} else {
-		commandPath = append(commandPath, "down")
+		commandPath[5] = "down"
 		cmd = exec.Command(commandPath[0], commandPath[1:]...)
 	}
-	fmt.Printf("Running the command: %v\n", strings.Join(commandPath, " "))
 
+	fmt.Printf("Running the command: %v\n", strings.Join(commandPath[:], " "))
 	RunCommand(cmd)
 	fmt.Println("Command ran successfully")
 }

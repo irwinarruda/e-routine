@@ -43,3 +43,14 @@ e-routine-cmd --up ./migrations
 # -d or --down for removing the migrations
 e-routine-cmd --down ./migrations
 ```
+
+To run the server, firs install air
+
+```bash
+go install github.com/cosmtrek/air@latest
+```
+
+```bash
+# start the server and watch changes
+air bench
+```
