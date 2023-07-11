@@ -1,0 +1,16 @@
+run:
+  tests: false
+linters:
+  enable-all: true
+  disable:
+    - nosnakecase
+    - depguard
+    - gofumpt
+    - gci
+    - wsl
+    - wrapcheck
+    - structcheck
+    - unused
+    - forbidigo
+exclude-rules:
+  - testpackage
