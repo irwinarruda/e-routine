@@ -12,5 +12,11 @@ linters:
     - structcheck
     - unused
     - forbidigo
+    - golint
+    - revive
+    - whitespace
+    - stylecheck
+    - sqlclosecheck
+    - staticcheck
 exclude-rules:
   - testpackage
