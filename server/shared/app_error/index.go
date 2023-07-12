@@ -1,6 +1,10 @@
 package app_error
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/gofiber/fiber/v2"
+)
 
 type statusCode int
 
@@ -11,8 +15,9 @@ const (
 )
 
 type AppError struct {
-	message    string
-	statusCode statusCode
+	message         string
+	statusCode      statusCode
+	isPublicMessage bool
 }
 
 func (this AppError) Error() string {
@@ -20,5 +25,17 @@ func (this AppError) Error() string {
 }
 
 func New(message string, statusCode statusCode) error {
-	return AppError{message, statusCode}
+	return AppError{message: message, statusCode: statusCode, isPublicMessage: true}
+}
+
+func NewPrivate(message string, statusCode statusCode) error {
+	return AppError{message: message, statusCode: statusCode, isPublicMessage: false}
+}
+
+func HandleHttp(ctx *fiber.Ctx, err error) error {
+	if appError, ok := err.(AppError); ok {
+		return ctx.JSON(appError)
+	}
+
+	return ctx.JSON(AppError{message: err.Error(), statusCode: InternalServerError})
 }
